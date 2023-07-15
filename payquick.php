@@ -578,7 +578,6 @@ function custom_quickpay_gateway_class()
 		 * @return void
 		 */
 		public function callback_handler(): void {
-			print_r(123);
 			// Get callback body
 			$request_body = file_get_contents( "php://input" );
 
