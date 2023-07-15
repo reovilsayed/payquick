@@ -618,7 +618,7 @@ function custom_quickpay_gateway_class()
 								break;
 
 							case 'capture' :
-								$order->update_status( 'wc-processing');
+								WC_QuickPay_Callbacks::payment_captured( $order, $json );
 								break;
 
 							case 'refund' :
@@ -995,13 +995,14 @@ if (!class_exists('Payquick_Plugin_Frontend')) {
         public function redirect_after_order_create_or_payment($order_id)
         {
             $order = wc_get_order($order_id);
-            $order->update_status('wc-pending');
+
             $redirect_url = ''; // Replace with the URL of the new page
 
             if ($order) {
 				if($order->get_payment_method() == 'custom_quickpay_gateway'){
 					//wp_redirect($order->get_checkout_order_received_url());
 				}else{
+					$order->update_status('wc-pending');
 					$redirect_url = add_query_arg('order_id',$order->get_id(), get_permalink(get_page_by_path('custom-payment')));
 					wp_redirect($redirect_url);
 					exit;
