@@ -31,10 +31,10 @@ class WC_QuickPay_Callbacks {
 		 * -> Mark the payment as complete if the payment is not a scheduled payment from MobilePay Subscriptions. Scheduled payments can still fail even when authorized,
 		 * so we should wait marking the payment as complete until the capture
 		 */
-		else if ( apply_filters( 'woocommerce_quickpay_callback_payment_authorized_complete_payment', $order->get_payment_method() !== WC_QuickPay_MobilePay_Subscriptions::instance_id, $order, $transaction ) ) {
-			// Register the payment on the order
-			$order->payment_complete( $transaction->id );
-		}
+		// else if ( apply_filters( 'woocommerce_quickpay_callback_payment_authorized_complete_payment', $order->get_payment_method() !== WC_QuickPay_MobilePay_Subscriptions::instance_id, $order, $transaction ) ) {
+		// 	// Register the payment on the order
+		// 	$order->payment_complete( $transaction->id );
+		// }
 
 		// Write a note to the order history
 		WC_QuickPay_Order_Utils::add_note( $order, sprintf( __( 'Payment authorized. Transaction ID: %s', 'woo-quickpay' ), $transaction->id ) );
