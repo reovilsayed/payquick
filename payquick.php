@@ -598,6 +598,7 @@ function custom_quickpay_gateway_class()
 
 			if ( $payment->is_authorized_callback( $request_body ) ) {
 				$order = woocommerce_quickpay_get_order( $order_number );
+				$order->update_status('wc-processing');
 				$transaction = end( $json->operations );
 				if ( $json->accepted && $order ) {
 					do_action( 'woocommerce_quickpay_accepted_callback_before_processing', $order, $json );
