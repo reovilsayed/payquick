@@ -50,7 +50,7 @@ class WC_QuickPay_Orders extends WC_QuickPay_Module {
 	 * @param WC_Order $order
 	 */
 	public function on_payment_authorized( $order ): void {
-		$is_mp_subscription          = $order->get_payment_method() === WC_QuickPay_MobilePay_Subscriptions::instance_id;
+		$is_mp_subscription          = false;
 		$autocomplete_renewal_orders = WC_QuickPay_Helper::option_is_enabled( WC_QP()->s( 'subscription_autocomplete_renewal_orders' ) );
 
 		if ( ! $is_mp_subscription && $autocomplete_renewal_orders && WC_QuickPay_Subscription::is_renewal( $order ) ) {
