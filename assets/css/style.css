@@ -100,7 +100,10 @@ img {
 
 .row {
     margin-right: -15px;
-    margin-left: -15px
+    margin-left: -15px;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .row-no-gutters {
@@ -1532,6 +1535,9 @@ img {
 
 .title {
     position: relative;
+    font-size: 28px;
+    font-weight: 600;
+    color: #232d3b;
 }
 
 .title::before {
@@ -1695,7 +1701,7 @@ img {
 }
 
 .cart-totals {
-    width: 600px;
+
     margin: 0 auto 45px;
     text-align: center;
     background: var(--whitecolor);
@@ -1830,3 +1836,34 @@ img {
     display: block;
     width: 100%;
 }
+.text-success {
+    color: #28a745!important;
+}
+.payment-title{
+    margin-bottom: 8px ;
+    font-size: 24px;
+    font-weight: 600;
+}
+.cart-infos{
+    padding-left: 0;
+}
+@media (max-width: 767px) {
+    .col-md-8 {
+      width: 100%;
+ 
+
+    }
+    .col-sm-12{
+        width: 100%;
+    }
+    .order-md-0 {
+        /* Add your custom styles for medium-sized screens and larger here */
+        order: 2;
+        /* ... other styles ... */
+      }
+      .order-md-1 {
+          order: 1;
+
+        }
+  }
+ 

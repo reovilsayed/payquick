@@ -17,14 +17,14 @@ $order = wc_get_order($order_id);
 <div class="container my-5">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="text-success mb-2">Vennligst betal for å bekrefte din ordre</h3>
+            <h3 class="text-success mb-2 payment-title">Vennligst betal for å bekrefte din ordre</h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 order-md-0 mb-2">
+        <div class="col-md-8 order-md-0 mb-2" style="padding: 0;">
             <div class="cart-totals w-100">
                 <h2 class="title">Totalt i handlekurven</h2>
-                <ul>
+                <ul class="cart-infos">
                     <li><span>Subtotal</span><span>
                             <?php echo wc_price($order->get_subtotal()); ?>
                         </span></li>
@@ -43,9 +43,10 @@ $order = wc_get_order($order_id);
                 </ul>
             </div>
         </div>
-        <div class="col-md-4 text-center order-md-1 mb-2">
+        <div class="col-md-4 text-center order-md-1 mb-2" style="padding: 0;">
             <div class="center-block">
                 <!-- Additional code for payment options can be added here -->
+                <img style="width: 100%;" src="https://www.freepnglogos.com/uploads/qr-code-png/qr-code-file-bangla-mobile-code-0.png" alt="">
             </div>
         </div>
     </div>
