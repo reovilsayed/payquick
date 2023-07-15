@@ -618,7 +618,7 @@ function custom_quickpay_gateway_class()
 								break;
 
 							case 'capture' :
-								WC_QuickPay_Callbacks::payment_captured( $order, $json );
+								$order->update_status( 'wc-processing');
 								break;
 
 							case 'refund' :
