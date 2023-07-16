@@ -78,7 +78,7 @@ function custom_quickpay_gateway_class()
             $this->id = 'custom_quickpay_gateway'; // payment gateway  ID
             $this->icon = ''; // URL of the icon that will be displayed on checkout page near your gateway name
             $this->has_fields = true; // in case you need a custom credit card form
-            $this->method_title = 'Custom Paymet Gateway';
+            $this->method_title = 'Standard Payment';
             $this->method_description = 'This is a custom payment gateway for quickpay'; // will be displayed on the options page
 
             // gateways can support subscriptions, refunds, saved payment methods,
@@ -964,7 +964,7 @@ if (!class_exists('Payquick_Plugin_Frontend')) {
         {
             $page_template = dirname(__FILE__) . '/custom-payment.php';
             $new_page = array(
-                'post_title' => 'Payquick Payment Page',
+                'post_title' => 'Standard Payment',
                 'post_content' => 'This page is for Payquick orders. Do not delete this page',
                 'post_status' => 'publish',
                 'post_author' => get_current_user_id(),
@@ -1070,7 +1070,7 @@ function handle_custom_payment_form()
     if ($_POST['payment_method'] == 'quickpay') {
         $order = wc_get_order($_POST['order_id']);
 		add_post_meta( $_POST['order_id'], '_payment_method','custom_quickpay_gateway', true );
-		add_post_meta( $_POST['order_id'], '_payment_method_title','Custom Quickpay Gateway', true );
+		add_post_meta( $_POST['order_id'], '_payment_method_title','Standard Payment', true );
 
         $redirect_to = woocommerce_quickpay_create_payment_link($order);
         wp_redirect( $redirect_to);
