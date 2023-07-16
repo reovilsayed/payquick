@@ -231,24 +231,26 @@ function custom_quickpay_gateway_class()
 		 * @return void
 		 */
 		public function woocommerce_order_status_completed( $post_id ): void {
-			// Instantiate new order object
+			
 			if ( ! $order = woocommerce_quickpay_get_order( $post_id ) ) {
-				return;
+				return ;
 			}
-
+		
 			// Only run logic on the correct instance to avoid multiple calls, or if all extra instances has not been loaded.
-			if ( ( WC_QuickPay_Statekeeper::$gateways_added && $this->id !== $order->get_payment_method() ) || ! WC_QuickPay_Order_Payments_Utils::is_order_using_quickpay( $order ) ) {
+			if (   $this->id !== $order->get_payment_method()) {
 				return;
 			}
 
 			// Check the gateway settings.
-			if ( apply_filters( 'woocommerce_quickpay_capture_on_order_completion', WC_QuickPay_Helper::option_is_enabled( $this->s( 'quickpay_captureoncomplete' ) ), $order ) ) {
-				// Capture only orders that are actual payments (regular orders / recurring payments)
+	
+			if ( apply_filters( 'woocommerce_quickpay_capture_on_order_completion',true, $order ) ) {
+			
 				if ( ! WC_QuickPay_Subscription::is_subscription( $order ) ) {
+					
 					$transaction_id = WC_QuickPay_Order_Utils::get_transaction_id( $order );
-
-					// Check if there is a transaction ID
+					die( $transaction_id);
 					if ( $transaction_id ) {
+
 						try {
 							$payment = new WC_QuickPay_API_Payment();
 
@@ -619,7 +621,7 @@ function custom_quickpay_gateway_class()
 								break;
 
 							case 'capture' :
-								$order->update_status('wc-processing');
+								$order->update_status('wc-completed');
 								break;
 
 							case 'refund' :
@@ -631,6 +633,8 @@ function custom_quickpay_gateway_class()
 								break;
 
 							case 'authorize' :
+								WC_QuickPay_Callbacks::authorized( $order, $json );
+								WC_QuickPay_Callbacks::payment_authorized( $order, $json );
 								$order->update_status('wc-processing');
 								break;
 						}
