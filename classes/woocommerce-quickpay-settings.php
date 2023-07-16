@@ -361,7 +361,7 @@ class WC_QuickPay_Settings {
 	 * @return mixed
 	 */
 	public static function get_settings_page_url() {
-		return admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wc_quickpay' );
+		return admin_url( 'admin.php?page=wc-settings&tab=checkout&section=custom_quickpay_gateway' );
 	}
 
 	/**
