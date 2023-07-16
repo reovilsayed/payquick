@@ -248,7 +248,6 @@ function custom_quickpay_gateway_class()
 				if ( ! WC_QuickPay_Subscription::is_subscription( $order ) ) {
 					
 					$transaction_id = WC_QuickPay_Order_Utils::get_transaction_id( $order );
-					die( $transaction_id);
 					if ( $transaction_id ) {
 
 						try {
