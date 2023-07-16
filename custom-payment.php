@@ -46,7 +46,7 @@ $order = wc_get_order($order_id);
         <div class="col-md-4 text-center order-md-1 mb-2" style="padding: 0;">
             <div class="center-block">
                 <!-- Additional code for payment options can be added here -->
-                <img style="width: 100%;" src="https://www.freepnglogos.com/uploads/qr-code-png/qr-code-file-bangla-mobile-code-0.png" alt="">
+                <div id="qrcode"></div>
             </div>
         </div>
     </div>
@@ -66,7 +66,16 @@ $order = wc_get_order($order_id);
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
 
+  var dynamicURL = `<?php echo home_url($_SERVER['REQUEST_URI'])?>`;
+  var qrCode = new QRCode(document.getElementById("qrcode"), {
+    text: dynamicURL,
+  });
+  qrCode.makeCode(dynamicURL);
+
+</script>
 
 <?php
 // Include the necessary theme files
