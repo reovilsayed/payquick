@@ -255,7 +255,7 @@ function custom_quickpay_gateway_class()
 
 							// Retrieve resource data about the transaction
 							$payment->get( $transaction_id );
-
+							die($payment->get( $transaction_id ));
 							// Check if the transaction can be captured
 							if ( $payment->is_action_allowed( 'capture' ) ) {
 
