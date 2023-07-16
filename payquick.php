@@ -255,8 +255,7 @@ function custom_quickpay_gateway_class()
 
 							// Retrieve resource data about the transaction
 							    $payment->get( $transaction_id );
-								$amount_multiplied = WC_QuickPay_Helper::price_multiply( $order->get_total(), $payment->get_currency() ) - $payment->get_balance();
-								$amount            = WC_QuickPay_Helper::price_multiplied_to_float( $amount_multiplied, $payment->get_currency() );
+								$amount            = WC_QuickPay_Helper::price_multiplied_to_float( $order->get_total(), $payment->get_currency() );
 								$payment->capture( $transaction_id, $order, $amount );
 
 						} catch ( QuickPay_Capture_Exception $e ) {
