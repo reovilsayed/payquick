@@ -254,18 +254,11 @@ function custom_quickpay_gateway_class()
 							$payment = new WC_QuickPay_API_Payment();
 
 							// Retrieve resource data about the transaction
-							$payment->get( $transaction_id );
-							die($payment->get( $transaction_id ));
-							// Check if the transaction can be captured
-							if ( $payment->is_action_allowed( 'capture' ) ) {
-
-								// In case a payment has been partially captured, we check the balance and subtracts it from the order
-								// total to avoid exceptions.
+							    $payment->get( $transaction_id );
 								$amount_multiplied = WC_QuickPay_Helper::price_multiply( $order->get_total(), $payment->get_currency() ) - $payment->get_balance();
 								$amount            = WC_QuickPay_Helper::price_multiplied_to_float( $amount_multiplied, $payment->get_currency() );
-
 								$payment->capture( $transaction_id, $order, $amount );
-							}
+
 						} catch ( QuickPay_Capture_Exception $e ) {
 							woocommerce_quickpay_add_runtime_error_notice( $e->getMessage() );
 							$order->add_order_note( $e->getMessage() );
