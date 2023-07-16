@@ -13,7 +13,7 @@ class WC_QuickPay_Callbacks {
 	 */
 	public static function payment_authorized( $order, $transaction ): void {
 
-		$order->payment_complete( $transaction->id );
+		//$order->payment_complete( $transaction->id );
 		WC_QuickPay_Order_Utils::add_note( $order, sprintf( __( 'Payment authorized. Transaction ID: %s', 'woo-quickpay' ), $transaction->id ) );
 		self::save_transaction_id_fallback( $order, $transaction );
 		do_action( 'woocommerce_quickpay_callback_payment_authorized', $order, $transaction );
