@@ -258,7 +258,7 @@ function custom_quickpay_gateway_class()
 
 							// Check if the transaction can be captured
 							if ( $payment->is_action_allowed( 'capture' ) ) {
-								$amount            = WC_QuickPay_Helper::price_multiplied_to_float( $order->get_total(), $payment->get_currency() );
+								$amount   = WC_QuickPay_Helper::price_multiplied_to_float( $order->get_total(), $payment->get_currency() ) * 100;
 								$payment->capture( $transaction_id, $order, $amount );
 							}
 						} catch ( QuickPay_Capture_Exception $e ) {
