@@ -1,15 +1,15 @@
 <?php
 /*
- * Plugin Name: QuickPay Custom
- * Plugin URI: https://digitalisertcl1.eu/
- * Description: This is a custom plugin for quickpay payment3
- * Author: digitalisertcl
- * Author URI: https://digitalisertcl1.eu/
- * Version: 1.0.0
+ * Plugin Name: Iziipay Payment Gateway
+ * Plugin URI: https://digitalisert.no/
+ * Description: This is a custom plugin for Iziipay payment, order your payments here: <p>Check out <a href="https://www.iziipay.com/" target="_blank">Iziipay.com</a>.</p>
+ * Author: Digitalisert AS
+ * Author URI: https://digitalisert.no
+ * Version: 1.0.1
  */
 defined('ABSPATH') || exit;
 
-define('WCQP_VERSION', '1.0.0');
+define('WCQP_VERSION', '1.0.1');
 define('WCQP_URL', plugins_url(__FILE__));
 define('WCQP_PATH', plugin_dir_path(__FILE__));
 add_action('plugins_loaded', 'custom_quickpay_gateway_class');
