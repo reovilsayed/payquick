@@ -873,7 +873,7 @@ function custom_quickpay_gateway_class()
 					'title'       => __( 'Auto Capture', 'woo-quickpay' ),
 					'type'        => 'checkbox',
 					'label'       => __( 'Enable', 'woo-quickpay' ),
-					'description' => __( 'Enable Auto Capture If you sell services, digital or downloadable goods. .', 'woo-quickpay' ),
+					'description' => __( 'Enable Auto Capture If you sell services, digital or downloadable goods.', 'woo-quickpay' ),
 					'default'     => 'no',
 					'desc_tip'    => false,
 				],
