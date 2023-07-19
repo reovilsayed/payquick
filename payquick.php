@@ -2,7 +2,7 @@
 /*
  * Plugin Name: QuickPay Custom
  * Plugin URI: https://digitalisertcl1.eu/
- * Description: This is a custom plugin for quickpay payment
+ * Description: This is a custom plugin for quickpay payment3
  * Author: digitalisertcl
  * Author URI: https://digitalisertcl1.eu/
  * Version: 1.0.0
