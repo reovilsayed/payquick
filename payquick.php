@@ -858,6 +858,13 @@ function custom_quickpay_gateway_class()
                     'description' => '',
                     'default' => 'no'
                 ),
+                'direct_payment' => array(
+                    'title' => 'Enable/Disable',
+                    'label' => 'Redirec To QuickPay Payment Page',
+                    'type' => 'checkbox',
+                    'description' => 'if you enable this it will redirect you to direct quickpay payment page. It will ignore the qr page',
+                    'default' => 'no'
+                ),
                 'title' => array(
                     'title' => 'Title',
                     'type' => 'text',
@@ -993,8 +1000,12 @@ if (!class_exists('Payquick_Plugin_Frontend')) {
 					//wp_redirect($order->get_checkout_order_received_url());
 				}else{
 					$order->update_status('wc-pending');
-					$redirect_url = add_query_arg('order_id',$order->get_id(), get_permalink(get_page_by_path('custom-payment')));
-					wp_redirect($redirect_url);
+			
+					 $redirect_to = woocommerce_quickpay_create_payment_link($order);
+					 wp_redirect( $redirect_to);
+					// $order->update_status('wc-pending');
+					// $redirect_url = add_query_arg('order_id',$order->get_id(), get_permalink(get_page_by_path('custom-payment')));
+					// wp_redirect($redirect_url);
 					exit;
 				}
             }
