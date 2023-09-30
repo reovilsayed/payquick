@@ -292,6 +292,7 @@ function custom_quickpay_gateway_class() {
 		 */
 		public function admin_notices() {
 			WC_QuickPay_Settings::show_admin_setup_notices();
+			WC_QuickPay_Settings::show_invalid_subscription_message();
 			WC_QuickPay_Install::show_update_warning();
 		}
 
@@ -390,7 +391,17 @@ function custom_quickpay_gateway_class() {
 		 * @return array
 		 */
 		public function process_payment( $order_id ) {
-			return $this->prepare_external_window_payment( woocommerce_quickpay_get_order( $order_id ) );
+			$iziibuy_subscription = get_option('woocommerce_custom_quickpay_gateway_iziibuy_subscription');
+			if ($iziibuy_subscription != 'yes') {
+				$error_message = __('There is a problem with the payment gateway. Please contact with the administrator', '');
+	
+				// Add an error notice
+				wc_add_notice($error_message, 'error');
+	
+				// Redirect back to the checkout page
+				return false;
+			}
+		   return $this->prepare_external_window_payment( woocommerce_quickpay_get_order( $order_id ) );
 		}
 
 		/**
@@ -1244,3 +1255,46 @@ function handle_custom_payment_form()
     // wp_redirect( home_url('/thank-you') );
     exit;
 }
+
+add_action('woocommerce_update_options', 'handle_iziibuy_subscription_checkup');
+
+function handle_iziibuy_subscription_checkup() {
+		$iziibuy_api_key = WC_QP()->s( 'iziibuy_api_key' );
+		$url = sprintf('https://iziibuy.com/api/payment-method-access/%s', $iziibuy_api_key);
+        $response = wp_remote_get($url);
+
+		if (is_wp_error($response)) {
+			echo '<div class="notice notice-error"><p>Error: ' . $response->get_error_message() . '</p></div>';
+		} else {
+			$response_code = wp_remote_retrieve_response_code($response);
+			if ($response_code == 200) {
+
+				$body = wp_remote_retrieve_body($response);
+				$response_data = json_decode($body, true);
+
+				if (isset($response_data['status']) && $response_data['status'] === true) {
+					update_option('woocommerce_custom_quickpay_gateway_iziibuy_subscription', 'yes');
+				} else {
+					update_option('woocommerce_custom_quickpay_gateway_iziibuy_subscription', 'no');
+				}
+				
+			} elseif ($response_code == 404) {
+				// Not Found (HTTP 404) error handling
+				echo '<div class="notice notice-error"><p>404 - Not Found</p></div>';
+			} elseif ($response_code == 500) {
+				// Internal Server Error (HTTP 500) error handling
+				echo '<div class="notice notice-error"><p>500 - Internal Server Error</p></div>';
+			} else {
+				echo '<div class="notice notice-warning"><p>HTTP ' . esc_html($response_code) . '</p></div>';
+			}
+		}
+
+}
+
+// Schedule the task to run daily
+if (!wp_next_scheduled('custom_quickpay_gateway_iziibuy_schedule_task_hook')) {
+    wp_schedule_event(current_time('timestamp'), 'daily', 'custom_quickpay_gateway_iziibuy_schedule_task_hook');
+}
+
+// Hook your task to the scheduled event
+add_action('custom_quickpay_gateway_iziibuy_schedule_task_hook', 'handle_iziibuy_subscription_checkup');

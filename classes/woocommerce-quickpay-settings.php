@@ -35,10 +35,12 @@ class WC_QuickPay_Settings {
                     'description' => 'if you enable this it will redirect you to direct quickpay payment page. It will ignore the qr page',
                     'default' => 'no'
                 ),
-				// '_Account_setup'               => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'API - Integration', 'woo-quickpay' ),
-				// ],
+				'iziibuy_api_key'              => [
+					'title' => 'Iziibuy Api Key',
+					'type'        => 'text',
+					'description' => __( 'This api key is from iziibuy website. And this key verify that you have purchase the subscription from the iziibuy website.', 'woo-quickpay' ),
+					'desc_tip'    => true,
+				],
 				'quickpay_apikey'              => [
 					'title' => 'Api Key',
 					'type'        => 'text',
@@ -51,10 +53,6 @@ class WC_QuickPay_Settings {
 					'description' => __( 'Your agreement private key. Found in the "Integration" tab inside the QuickPay manager.', 'woo-quickpay' ),
 					'desc_tip'    => true,
 				],
-				// '_Autocapture'                 => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Autocapture settings', 'woo-quickpay' )
-				// ],
 				'quickpay_autocapture'         => [
 					'title'       => __( 'Auto Capture', 'woo-quickpay' ),
 					'type'        => 'checkbox',
@@ -71,52 +69,6 @@ class WC_QuickPay_Settings {
 					'default'     => 'no',
 					'desc_tip'    => false,
 				],
-				// '_caching'                     => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Transaction Cache', 'woo-quickpay' )
-				// ],
-				// 'quickpay_caching_enabled'     => [
-				// 	'title'       => __( 'Enable Caching', 'woo-quickpay' ),
-				// 	'type'        => 'checkbox',
-				// 	'description' => __( 'Caches transaction data to improve application and web-server performance. <strong>Recommended.</strong>', 'woo-quickpay' ),
-				// 	'default'     => 'yes',
-				// 	'desc_tip'    => false,
-				// ],
-				// 'quickpay_caching_expiration'  => [
-				// 	'title'       => __( 'Cache Expiration', 'woo-quickpay' ),
-				// 	'label'       => __( 'Cache Expiration', 'woo-quickpay' ),
-				// 	'type'        => 'number',
-				// 	'description' => __( '<strong>Time in seconds</strong> for how long a transaction should be cached. <strong>Default: 604800 (7 days).</strong>', 'woo-quickpay' ),
-				// 	'default'     => 7 * DAY_IN_SECONDS,
-				// 	'desc_tip'    => false,
-				// ],
-
-				// '_Extra_gateway_settings' => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Extra gateway settings', 'woo-quickpay' )
-				// ],
-				// 'quickpay_cardtypelock'   => [
-				// 	'title'       => __( 'Payment methods', 'woo-quickpay' ),
-				// 	'type'        => 'text',
-				// 	'description' => __( 'Default: creditcard. Type in the cards you wish to accept (comma separated). See the valid payment types here: <b>https://learn.quickpay.net/tech-talk/appendixes/payment-methods/#payment-methods</b>', 'woo-quickpay' ),
-				// 	'default'     => 'creditcard',
-				// ],
-				// 'quickpay_branding_id'    => [
-				// 	'title'       => __( 'Branding ID', 'woo-quickpay' ),
-				// 	'type'        => 'text',
-				// 	'description' => __( 'Leave empty if you have no custom branding options', 'woo-quickpay' ),
-				// 	'default'     => '',
-				// 	'desc_tip'    => true,
-				// ],
-
-				// 'quickpay_autofee'                      => [
-				// 	'title'       => __( 'Enable autofee', 'woo-quickpay' ),
-				// 	'type'        => 'checkbox',
-				// 	'label'       => __( 'Enable', 'woo-quickpay' ),
-				// 	'description' => __( 'If enabled, the fee charged by the acquirer will be calculated and added to the transaction amount.', 'woo-quickpay' ),
-				// 	'default'     => 'no',
-				// 	'desc_tip'    => true,
-				// ],
 				'quickpay_captureoncomplete'            => [
 					'title'       => __( 'Capture on complete', 'woo-quickpay' ),
 					'type'        => 'checkbox',
@@ -139,22 +91,6 @@ class WC_QuickPay_Settings {
 					'description' => __( 'Automatically cancel payments via the API when an order\'s status changes to cancelled.', 'woo-quickpay' ),
 					'default'     => 'no',
 				],
-				// 'quickpay_text_on_statement'            => [
-				// 	'title'             => __( 'Text on statement', 'woo-quickpay' ),
-				// 	'type'              => 'text',
-				// 	'description'       => __( 'Text that will be placed on cardholder’s bank statement (MAX 22 ASCII characters. Must match the values defined in your agreement with Clearhaus. Custom values are not allowed).', 'woo-quickpay' ),
-				// 	'default'           => '',
-				// 	'desc_tip'          => false,
-				// 	'custom_attributes' => [
-				// 		'maxlength' => 22,
-				// 	],
-				// ],
-
-
-				// '_Shop_setup'                           => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Shop setup', 'woo-quickpay' ),
-				// ],
 				'title'                                 => [
 					'title'       => __( 'Title', 'woo-quickpay' ),
 					'type'        => 'text',
@@ -168,83 +104,7 @@ class WC_QuickPay_Settings {
 					'description' => __( 'This controls the description which the user sees during checkout.', 'woo-quickpay' ),
 					'default'     => __( 'Pay via QuickPay. Allows you to pay with your credit card via QuickPay.', 'woo-quickpay' ),
 					'desc_tip'    => true,
-				],
-				// 'checkout_button_text'                  => [
-				// 	'title'       => __( 'Order button text', 'woo-quickpay' ),
-				// 	'type'        => 'text',
-				// 	'description' => __( 'Text shown on the submit button when choosing payment method.', 'woo-quickpay' ),
-				// 	'default'     => __( 'Go to payment', 'woo-quickpay' ),
-				// 	'desc_tip'    => true,
-				// ],
-				// 'instructions'                          => [
-				// 	'title'       => __( 'Email instructions', 'woo-quickpay' ),
-				// 	'type'        => 'textarea',
-				// 	'description' => __( 'Instructions that will be added to emails.', 'woo-quickpay' ),
-				// 	'default'     => '',
-				// 	'desc_tip'    => true,
-				// ],
-				// 'quickpay_icons'                        => [
-				// 	'title'             => __( 'Credit card icons', 'woo-quickpay' ),
-				// 	'type'              => 'multiselect',
-				// 	'description'       => __( 'Choose the card icons you wish to show next to the QuickPay payment option in your shop.', 'woo-quickpay' ),
-				// 	'desc_tip'          => true,
-				// 	'class'             => 'wc-enhanced-select',
-				// 	'css'               => 'width: 450px;',
-				// 	'custom_attributes' => [
-				// 		'data-placeholder' => __( 'Select icons', 'woo-quickpay' )
-				// 	],
-				// 	'default'           => '',
-				// 	'options'           => self::get_card_icons(),
-				// ],
-				// 'quickpay_icons_maxheight'              => [
-				// 	'title'       => __( 'Credit card icons maximum height', 'woo-quickpay' ),
-				// 	'type'        => 'number',
-				// 	'description' => __( 'Set the maximum pixel height of the credit card icons shown on the frontend.', 'woo-quickpay' ),
-				// 	'default'     => 20,
-				// 	'desc_tip'    => true,
-				// ],
-				// 'Google Analytics'                      => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Google Analytics', 'woo-quickpay' ),
-				// ],
-				// 'quickpay_google_analytics_tracking_id' => [
-				// 	'title'       => __( 'Tracking ID', 'woo-quickpay' ),
-				// 	'type'        => 'text',
-				// 	'description' => __( 'Your Google Analytics tracking ID. I.E: UA-XXXXXXXXX-X', 'woo-quickpay' ),
-				// 	'default'     => '',
-				// 	'desc_tip'    => true,
-				// ],
-				// 'ShopAdminSetup'                        => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Shop Admin Setup', 'woo-quickpay' ),
-				// ],
-
-				// 'quickpay_orders_transaction_info' => [
-				// 	'title'       => __( 'Fetch Transaction Info', 'woo-quickpay' ),
-				// 	'type'        => 'checkbox',
-				// 	'label'       => __( 'Enable', 'woo-quickpay' ),
-				// 	'description' => __( 'Show transaction information in the order overview.', 'woo-quickpay' ),
-				// 	'default'     => 'yes',
-				// 	'desc_tip'    => false,
-				// ],
-
-				// 'CustomVariables'           => [
-				// 	'type'  => 'title',
-				// 	'title' => __( 'Custom Variables', 'woo-quickpay' ),
-				// ],
-				// 'quickpay_custom_variables' => [
-				// 	'title'             => __( 'Select Information', 'woo-quickpay' ),
-				// 	'type'              => 'multiselect',
-				// 	'class'             => 'wc-enhanced-select',
-				// 	'css'               => 'width: 450px;',
-				// 	'default'           => '',
-				// 	'description'       => __( 'Selected options will store the specific data on your transaction inside your QuickPay Manager.', 'woo-quickpay' ),
-				// 	'options'           => self::custom_variable_options(),
-				// 	'desc_tip'          => true,
-				// 	'custom_attributes' => [
-				// 		'data-placeholder' => __( 'Select order data', 'woo-quickpay' )
-				// 	]
-				// ],
+				]
 			];
 
 		if ( WC_QuickPay_Subscription::plugin_is_active() ) {
@@ -401,6 +261,18 @@ class WC_QuickPay_Settings {
 			printf( '<div class="%s">%s</div>', 'notice notice-error', $message );
 		}
 
+	}
+	public static function show_invalid_subscription_message() {
+		$iziibuy_subscription = get_option('woocommerce_custom_quickpay_gateway_iziibuy_subscription');
+		if($iziibuy_subscription != 'yes'){
+			$message = sprintf( '<h2>%s</h2>', __( "IziiPay", 'woo-quickpay' ) );
+			$message .= sprintf( '<p>%s</p>', sprintf( __( 'You have missing or incorrect settings. Go to the <a href="%s">settings page</a>.', 'woo-quickpay' ), self::get_settings_page_url() ) );
+			$message .= '<ul>';
+			  $message .= "<li>" . sprintf( __( '<strong>Iziibuy subscription key is invalid or Subscription expired</strong>', 'woo-quickpay' ) ) . "</li>";
+			$message .= '</ul>';
+
+			printf( '<div class="%s">%s</div>', 'notice notice-error', $message );
+		}
 	}
 
 	/**
