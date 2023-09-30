@@ -209,7 +209,7 @@ class WC_QuickPay_Helper {
 	 * @return string
 	 */
 	public static function get_callback_url( $post_id = null ) {
-		$args = [ 'wc-api' => 'WC_QuickPay' ];
+		$args = [ 'wc-api' => 'WC_Custom_QuickPay_Gateway' ];
 
 		if ( $post_id !== null ) {
 			$args['order_post_id'] = $post_id;
@@ -311,7 +311,7 @@ class WC_QuickPay_Helper {
 	 */
 	public static function qtranslate_prevent_redirect( $url_lang, $url_orig, $url_info ) {
 		// Prevent only on wc-api for this specific gateway
-		if ( isset( $url_info['query'] ) && stripos( $url_info['query'], 'wc-api=wc_quickpay' ) !== false ) {
+		if ( isset( $url_info['query'] ) && stripos( $url_info['query'], 'wc-api=custom_quickpay_gateway' ) !== false ) {
 			return false;
 		}
 
@@ -324,7 +324,7 @@ class WC_QuickPay_Helper {
 	 * @return bool
 	 */
 	public static function spamshield_bypass_security_check( $bypass ) {
-		return isset( $_GET['wc-api'] ) && strtolower( $_GET['wc-api'] ) === 'wc_quickpay';
+		return isset( $_GET['wc-api'] ) && strtolower( $_GET['wc-api'] ) === 'custom_quickpay_gateway';
 	}
 
 	/**
