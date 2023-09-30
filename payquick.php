@@ -1093,3 +1093,154 @@ add_action( 'before_woocommerce_init', function () {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 	}
 } );
+
+
+//other code not gateway related
+if (!class_exists('Payquick_Plugin_Frontend')) {
+    class Payquick_Plugin_Frontend
+    {
+        public function __construct()
+        {
+            add_action('plugins_loaded', array($this, 'initialize'), 99);
+            register_activation_hook(__FILE__, array($this, 'activate'));
+            register_deactivation_hook(__FILE__, array($this, 'deactivate'));
+        }
+
+        public function initialize()
+        {
+            if (!class_exists('WooCommerce')) {
+                $error = new WP_Error('woocommerce_not_found', __('WooCommerce is required for activating this plugin.', 'text-domain'));
+                wp_die($error);
+            }
+
+            //add_filter('woocommerce_cart_needs_payment', '__return_false');
+            add_action('woocommerce_thankyou', array($this, 'redirect_after_order_create_or_payment'));
+            add_filter('theme_page_templates', array($this, 'quickpay_custom_template'));
+            add_filter('template_include', array($this, 'load_custom_template'));
+            add_filter('wp_enqueue_scripts', array($this, 'custom_payment_enqueue_styles'));
+        }
+
+        public function activate()
+        {
+            $page_template = dirname(__FILE__) . '/custom-payment.php';
+            $new_page = array(
+                'post_title' => 'Standard Payment',
+                'post_content' => 'This page is for Payquick orders. Do not delete this page',
+                'post_status' => 'publish',
+                'post_author' => get_current_user_id(),
+                'post_type' => 'page',
+                'post_name' => 'custom-payment',
+            );
+
+            if (!get_page_by_path('custom-payment', OBJECT, 'page')) {
+                $post_id = wp_insert_post($new_page);
+                update_post_meta($post_id, '_wp_page_template', 'custom-payment.php');
+            }
+        }
+
+        public function deactivate()
+        {
+            // Plugin deactivation
+        }
+        public function redirect_after_order_create_or_payment($order_id)
+        {
+            $order = wc_get_order($order_id);
+
+            $redirect_url = ''; // Replace with the URL of the new page
+
+            if ($order) {
+				if($order->get_payment_method() == 'custom_quickpay_gateway'){
+					//wp_redirect($order->get_checkout_order_received_url());
+				}else{
+					// $order->update_status('wc-pending');
+					if(WC_QP()->s( 'direct_payment' ) == 'yes'){
+						$redirect_to = woocommerce_quickpay_create_payment_link($order);
+						wp_redirect( $redirect_to);
+					}else{
+						$redirect_url = add_query_arg('order_id',$order->get_id(), get_permalink(get_page_by_path('custom-payment')));
+						wp_redirect($redirect_url);
+					}
+					exit;
+				}
+            }
+        }
+
+        public function quickpay_custom_template($templates)
+        {
+            $templates['custom-payment.php'] = 'QuickPay Custom Template';
+            return $templates;
+        }
+        public function load_custom_template($template)
+        {
+            if (is_page('custom-payment')) {
+                $custom_template = dirname(__FILE__) . '/custom-payment.php';
+                if (file_exists($custom_template)) {
+                    return $custom_template;
+                }
+            }
+            return $template;
+        }
+        public function custom_payment_enqueue_styles()
+        {
+            // Enqueue your custom CSS file
+            wp_enqueue_style('custom_quickpay_css', plugin_dir_url(__FILE__) . 'assets/css/style.css');
+        }
+
+    }
+
+    // Instantiate the class
+    new Payquick_Plugin_Frontend();
+}
+
+
+add_action('init', 'register_payment_confirmation_page');
+
+function register_payment_confirmation_page()
+{
+    add_rewrite_rule('^payment-confirmation/?$', 'index.php?custom_payment_confirmation_page=payment_confirmation', 'top');
+    flush_rewrite_rules();
+}
+
+add_filter('query_vars', 'add_payment_confirmation_query_vars');
+
+function add_payment_confirmation_query_vars($vars)
+{
+    $vars[] = 'custom_payment_confirmation_page';
+    return $vars;
+}
+
+add_filter('template_redirect', 'payment_confirmation_route');
+
+function payment_confirmation_route()
+{
+    $custom_page = get_query_var('custom_payment_confirmation_page');
+    if ($custom_page === 'payment_confirmation') {
+        if (true) {
+            $order = wc_get_order(35);
+            $redirect_to = woocommerce_quickpay_create_payment_link($order);
+           // print_r($redirect_to);
+            exit;
+        } else {
+            wp_redirect();
+            exit;
+        }
+    }
+}
+
+add_action('admin_post_custom_payment_form', 'handle_custom_payment_form');
+add_action('admin_post_nopriv_custom_payment_form', 'handle_custom_payment_form');
+
+function handle_custom_payment_form()
+{
+    if ($_POST['payment_method'] == 'quickpay') {
+        $order = wc_get_order($_POST['order_id']);
+		add_post_meta( $_POST['order_id'], '_payment_method','custom_quickpay_gateway', true );
+		add_post_meta( $_POST['order_id'], '_payment_method_title','Standard Payment', true );
+
+        $redirect_to = woocommerce_quickpay_create_payment_link($order);
+        wp_redirect( $redirect_to);
+    }
+
+    // wp_redirect( home_url('/thank-you') );
+    exit;
+}
