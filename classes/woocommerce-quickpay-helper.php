@@ -141,9 +141,9 @@ class WC_QuickPay_Helper {
 		 * Enqueue on the settings page for the gateways
 		 */
 		if ( isset( $_GET['page'], $_GET['tab'], $_GET['section'] ) ) {
-			// if ( $_GET['page'] === 'wc-settings' && $_GET['tab'] === 'checkout' && array_key_exists( $_GET['section'], array_merge( [ 'quickpay' => null ], WC_Custom_QuickPay_Gateway::get_gateway_instances() ) ) ) {
-			// 	return true;
-			// }
+			if ( $_GET['page'] === 'wc-settings' && $_GET['tab'] === 'checkout' && array_key_exists( $_GET['section'], array_merge( [ 'quickpay' => null ], WC_Custom_QuickPay_Gateway::get_gateway_instances() ) ) ) {
+				return true;
+			}
 		} /**
 		 * Enqueue on the shop order page
 		 */
@@ -209,7 +209,7 @@ class WC_QuickPay_Helper {
 	 * @return string
 	 */
 	public static function get_callback_url( $post_id = null ) {
-		$args = [ 'wc-api' => 'WC_Custom_QuickPay_Gateway' ];
+		$args = [ 'wc-api' => 'WC_QuickPay' ];
 
 		if ( $post_id !== null ) {
 			$args['order_post_id'] = $post_id;

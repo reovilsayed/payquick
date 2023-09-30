@@ -12,10 +12,36 @@ class WC_QuickPay_Callbacks {
 	 * @param stdClass $transaction
 	 */
 	public static function payment_authorized( $order, $transaction ): void {
+		// Add order transaction fee if available
+		if ( ! empty( $transaction->fee ) ) {
+			WC_QuickPay_Order_Payments_Utils::add_order_item_transaction_fee( $order, (int) $transaction->fee );
+		}
 
-		//$order->payment_complete( $transaction->id );
+		// Check for pre-order
+		if ( WC_QuickPay_Helper::has_preorder_plugin() && WC_Pre_Orders_Order::order_contains_pre_order( $order ) && WC_Pre_Orders_Order::order_requires_payment_tokenization( $order->get_id() ) ) {
+			try {
+				// Set transaction ID without marking the payment as complete
+				$order->set_transaction_id( $transaction->id );
+			} catch ( WC_Data_Exception $e ) {
+				WC_QP()->log->add( __( 'An error occured while setting transaction id: %d on order %s. %s', $transaction->id, $order->get_id(), $e->getMessage() ) );
+			}
+			WC_Pre_Orders_Order::mark_order_as_pre_ordered( $order );
+		} /**
+		 * Regular product
+		 * -> Mark the payment as complete if the payment is not a scheduled payment from MobilePay Subscriptions. Scheduled payments can still fail even when authorized,
+		 * so we should wait marking the payment as complete until the capture
+		 */
+		else if ( apply_filters( 'woocommerce_quickpay_callback_payment_authorized_complete_payment', $order->get_payment_method() !== WC_QuickPay_MobilePay_Subscriptions::instance_id, $order, $transaction ) ) {
+			// Register the payment on the order
+			$order->payment_complete( $transaction->id );
+		}
+
+		// Write a note to the order history
 		WC_QuickPay_Order_Utils::add_note( $order, sprintf( __( 'Payment authorized. Transaction ID: %s', 'woo-quickpay' ), $transaction->id ) );
+
+		// Fallback to save transaction IDs since this has seemed to sometimes fail when using WC_Order::payment_complete
 		self::save_transaction_id_fallback( $order, $transaction );
+
 		do_action( 'woocommerce_quickpay_callback_payment_authorized', $order, $transaction );
 	}
 

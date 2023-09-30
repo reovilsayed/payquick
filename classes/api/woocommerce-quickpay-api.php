@@ -43,7 +43,7 @@ class WC_QuickPay_API {
 	 */
 	public function __construct( $api_key = null ) {
 		if ( empty( $api_key ) ) {
-			$this->api_key = WC_QP()->s( 'api_key' );
+			$this->api_key = WC_QP()->s( 'quickpay_apikey' );
 		} else {
 			$this->api_key = $api_key;
 		}
@@ -69,7 +69,7 @@ class WC_QuickPay_API {
 			return false;
 		}
 
-		return hash_hmac( 'sha256', $response_body, WC_QP()->s( 'secret_key' ) ) === $_SERVER["HTTP_QUICKPAY_CHECKSUM_SHA256"];
+		return hash_hmac( 'sha256', $response_body, WC_QP()->s( 'quickpay_privatekey' ) ) === $_SERVER["HTTP_QUICKPAY_CHECKSUM_SHA256"];
 	}
 
 

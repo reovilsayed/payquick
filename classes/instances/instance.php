@@ -1,6 +1,6 @@
 <?php
 
-class WC_QuickPay_Instance extends WC_QuickPay {
+class WC_QuickPay_Instance extends WC_Custom_QuickPay_Gateway {
 
 	public $main_settings = null;
 
@@ -51,7 +51,7 @@ class WC_QuickPay_Instance extends WC_QuickPay {
 		$main_settings_args = [
 			'page'    => 'wc-settings',
 			'tab'     => 'checkout',
-			'section' => 'wc_quickpay'
+			'section' => 'custom_quickpay_gateway'
 		];
 
 		$html = sprintf( "<p><small>Version: %s</small>", WCQP_VERSION );
