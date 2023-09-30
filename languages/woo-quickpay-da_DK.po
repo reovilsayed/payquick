@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce QuickPay\n"
+"Project-Id-Version: IziiPay\n"
 "POT-Creation-Date: 2023-06-08 11:52+0200\n"
 "PO-Revision-Date: 2023-06-08 11:54+0200\n"
 "Last-Translator: \n"
@@ -997,8 +997,8 @@ msgstr "Tøm transaktions-cache"
 
 #. Plugin Name of the plugin/theme
 #: classes/woocommerce-quickpay-settings.php:387
-msgid "WooCommerce QuickPay"
-msgstr "WooCommerce QuickPay"
+msgid "IziiPay"
+msgstr "IziiPay"
 
 #: classes/woocommerce-quickpay-settings.php:388
 #, php-format
@@ -1105,8 +1105,8 @@ msgid "Thanks for shopping with us."
 msgstr "Tak fordi du handler hos os."
 
 #: views/html-notice-update.php:12 views/html-notice-upgrading.php:12
-msgid "WooCommerce QuickPay - Data Update"
-msgstr "WooCommerce QuickPay - Data opdatering"
+msgid "IziiPay - Data Update"
+msgstr "IziiPay - Data opdatering"
 
 #: views/html-notice-update.php:13
 msgid ""
@@ -1169,8 +1169,8 @@ msgid "Cached"
 msgstr "Cachet"
 
 #: woocommerce-quickpay.php:31
-msgid "WooCommerce QuickPay requires WooCommerce to be active."
-msgstr "WooCommerce QuickPay kræver at WooCommerce er aktiv."
+msgid "IziiPay requires WooCommerce to be active."
+msgstr "IziiPay kræver at WooCommerce er aktiv."
 
 #: woocommerce-quickpay.php:32
 msgid "Go to the plugins page to activate WooCommerce"

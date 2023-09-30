@@ -8,8 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div id="woocommerce-upgrade-notice" class="updated woocommerce-message wc-connect">
-    <h3><strong><?php _e( 'WooCommerce QuickPay - Data Update', 'woo-quickpay' ); ?></strong></h3>
+<!-- <div id="woocommerce-upgrade-notice" class="updated woocommerce-message wc-connect">
+    <h3><strong><?php _e( 'IziiPay - Data Update', 'woo-quickpay' ); ?></strong></h3>
     <p><?php _e( 'To ensure you get the best experience at all times, we need to update your store\'s database to the latest version.', 'woo-quickpay' ); ?></p>
     <p class="submit"><a href="#" class="woocommerce-quickpay-update-now button-primary"><?php _e( 'Run the updater', 'woo-quickpay' ); ?></a></p>
 </div>
@@ -32,4 +32,4 @@ if ( ! defined( 'ABSPATH' ) ) {
             }
         });
     })(jQuery);
-</script>
+</script> -->

@@ -1,7 +1,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce QuickPay\n"
+"Project-Id-Version: IziiPay\n"
 "POT-Creation-Date: 2023-06-08 11:52+0200\n"
 "PO-Revision-Date: 2016-06-21 13:16+0200\n"
 "Last-Translator: \n"
@@ -929,7 +929,7 @@ msgstr ""
 
 #. Plugin Name of the plugin/theme
 #: classes/woocommerce-quickpay-settings.php:387
-msgid "WooCommerce QuickPay"
+msgid "IziiPay"
 msgstr ""
 
 #: classes/woocommerce-quickpay-settings.php:388
@@ -1035,7 +1035,7 @@ msgid "Thanks for shopping with us."
 msgstr ""
 
 #: views/html-notice-update.php:12 views/html-notice-upgrading.php:12
-msgid "WooCommerce QuickPay - Data Update"
+msgid "IziiPay - Data Update"
 msgstr ""
 
 #: views/html-notice-update.php:13
@@ -1091,7 +1091,7 @@ msgid "Cached"
 msgstr ""
 
 #: woocommerce-quickpay.php:31
-msgid "WooCommerce QuickPay requires WooCommerce to be active."
+msgid "IziiPay requires WooCommerce to be active."
 msgstr ""
 
 #: woocommerce-quickpay.php:32

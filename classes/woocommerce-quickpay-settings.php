@@ -390,7 +390,7 @@ class WC_QuickPay_Settings {
 		}
 
 		if ( ! empty( $error_fields ) ) {
-			$message = sprintf( '<h2>%s</h2>', __( "WooCommerce QuickPay", 'woo-quickpay' ) );
+			$message = sprintf( '<h2>%s</h2>', __( "IziiPay", 'woo-quickpay' ) );
 			$message .= sprintf( '<p>%s</p>', sprintf( __( 'You have missing or incorrect settings. Go to the <a href="%s">settings page</a>.', 'woo-quickpay' ), self::get_settings_page_url() ) );
 			$message .= '<ul>';
 			foreach ( $error_fields as $error_field ) {

@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Iziipay Payment Gateway
  * Plugin URI: https://digitalisert.no/
- * Description: This is a custom plugin for Iziipay payment, order your payments here: <p>Check out <a href="https://www.iziipay.com/" target="_blank">Iziipay.com</a>.</p>
+ * Description: This is a custom plugin for Iziipay payment, order your payments here: <p>Check out <a href="https://www.iziipay.com/" target="_blank">Iziipay.comm</a>.</p>
  * Author: Digitalisert AS
  * Author URI: https://digitalisert.no
  * Version: 1.0.1
