@@ -1260,6 +1260,8 @@ add_action('woocommerce_update_options', 'handle_iziibuy_subscription_checkup');
 
 function handle_iziibuy_subscription_checkup() {
 		$iziibuy_api_key = WC_QP()->s( 'iziibuy_api_key' );
+		if (!empty($iziibuy_api_key)) {
+
 		$url = sprintf('https://iziibuy.com/api/payment-method-access/%s', $iziibuy_api_key);
         $response = wp_remote_get($url);
 
@@ -1288,12 +1290,18 @@ function handle_iziibuy_subscription_checkup() {
 				echo '<div class="notice notice-warning"><p>HTTP ' . esc_html($response_code) . '</p></div>';
 			}
 		}
+	}
 
 }
 
-// Schedule the task to run daily
-if (!wp_next_scheduled('custom_quickpay_gateway_iziibuy_schedule_task_hook')) {
-    wp_schedule_event(current_time('timestamp'), 'daily', 'custom_quickpay_gateway_iziibuy_schedule_task_hook');
+
+
+// Check if $iziibuy_api_key is not null before scheduling the task
+$iziibuy_api_key = WC_QP()->s('iziibuy_api_key');
+if (!empty($iziibuy_api_key)) {
+    if (!wp_next_scheduled('custom_quickpay_gateway_iziibuy_schedule_task_hook')) {
+        wp_schedule_event(current_time('timestamp'), 'daily', 'custom_quickpay_gateway_iziibuy_schedule_task_hook');
+    }
 }
 
 // Hook your task to the scheduled event
