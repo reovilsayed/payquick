@@ -1335,13 +1335,8 @@ function handle_iziibuy_subscription_checkup()
 }
 
 
-
-// Check if $iziibuy_api_key is not null before scheduling the task
-$iziibuy_api_key = WC_QP()->s('iziibuy_api_key');
-if (!empty($iziibuy_api_key)) {
-	if (!wp_next_scheduled('custom_quickpay_gateway_iziibuy_schedule_task_hook')) {
+if (!wp_next_scheduled('custom_quickpay_gateway_iziibuy_schedule_task_hook')) {
 		wp_schedule_event(current_time('timestamp'), 'daily', 'custom_quickpay_gateway_iziibuy_schedule_task_hook');
-	}
 }
 
 // Hook your task to the scheduled event
