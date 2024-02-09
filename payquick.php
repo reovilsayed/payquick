@@ -12,17 +12,90 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+define( 'WGC_DIR_PATH', plugin_dir_path( __FILE__ ) );
+
+// WC active check
+require_once( WGC_DIR_PATH . 'includes/functions-wc-gateway-converge.php' );
+if ( ! wgc_is_woocommerce_active() ) {
+	return;
+}
+
+define( 'WGC_VERSION', '1.16.0' );
+define( 'WGC_PAYMENT_NAME', "elavon-converge-gateway" );
+define( 'WGC_MAIN_FILE', __FILE__ );
+
+
 define('WCQP_VERSION', '1.0.1');
 define('WCQP_URL', plugins_url(__FILE__));
 define('WCQP_PATH', plugin_dir_path(__FILE__));
 
 add_action('plugins_loaded', 'custom_quickpay_gateway_class', 0);
 
+require_once __DIR__ . '/vendor/autoload.php';
+include_once 'includes/settings-constants-converge-payment-gateway.php';
+include_once 'includes/class-wc-gateway-converge-order-wrapper.php';
+include_once 'includes/class-wc-gateway-converge-api.php';
+include_once 'includes/class-wc-gateway-converge-admin-order-actions.php';
+include_once 'includes/class-wc-gateway-converge-admin-order-converge-status.php';
+include_once 'includes/validation/class-wc-validation-message.php';
+include_once 'includes/validation/class-wc-checkout-input-validator.php';
+include_once 'includes/validation/class-wc-config-validator.php';
+include_once 'includes/class-wc-gateway-converge-response-log-handler.php';
 
 
 
+add_action( 'woocommerce_before_template_part', 'wgc_before_template_part', 10, 3 );
+add_action( 'woocommerce_init', 'woocommerce_init', 10 );
+
+
+function woocommerce_init(){
+
+	// Fix the issues related to WP Sessions that only works for logged in users
+	wgc_force_non_logged_user_wc_session();
+
+	if ( wgc_subscriptions_active() ) {
+
+		add_filter('woocommerce_available_payment_gateways', 'wgc_conditional_payment_gateways');
+
+		if ( is_admin() ) {
+			include_once 'includes/validation/class-wc-subscription-validation-message.php';
+			include_once 'includes/validation/class-wc-plan-validator.php';
+			include_once 'includes/admin/meta-boxes/class-wc-meta-box-wgc-subscription-data.php';
+			include_once 'includes/admin/meta-boxes/class-wc-meta-box-wgc-coupon-data.php';
+			include_once 'includes/admin/class-wgc-admin-subscription-listing.php';
+		}
+		include_once 'includes/subscriptions/wgc-hooks.php';
+		include_once 'includes/subscriptions/class-wc-converge-subscription.php';
+		include_once 'includes/subscriptions/class-wc-product-converge-subscription.php';
+		include_once 'includes/subscriptions/class-wc-product-converge-variable-subscription.php';
+		include_once 'includes/subscriptions/class-wc-product-converge-subscription-variation.php';
+		include_once 'includes/class-wc-gateway-converge-subscription-post-types.php';
+		include_once 'includes/subscriptions/class-wc-cart-converge-subscriptions.php';
+		include_once 'includes/subscriptions/class-wc-checkout-converge-subscriptions.php';
+		include_once 'includes/subscriptions/class-wgc-form-handler.php';
+	}
+}
+
+
+function wgc_before_template_part( $template_name, $template_path, $located ) {
+	if ( 'checkout/thankyou.php' == $template_name ) {
+		woocommerce_output_all_notices();
+	}
+}
 function custom_quickpay_gateway_class()
 {
+
+	// Set up localisation.
+	$text_domain = wgc_get_payment_name();
+	$locale      = is_admin() && function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+	$locale      = apply_filters( 'plugin_locale', $locale, $text_domain );
+
+	unload_textdomain( $text_domain );
+	load_textdomain( $text_domain, WP_LANG_DIR . '/woocommerge-gateway-converge/woocommerce-gateway-converge-' . $locale . '.mo' );
+	load_plugin_textdomain( wgc_get_payment_name(), false, basename( WGC_DIR_PATH ) . '/i18n/languages' );
+
+	require_once 'includes/class-wc-gateway-converge.php';
+	require_once 'includes/class-wc-payment-token-gateway-converge-storedcard.php';
 	/**
 	 * Required functions
 	 */
@@ -1118,7 +1191,7 @@ function custom_quickpay_gateway_class()
 	function add_quickpay_gateway($methods)
 	{
 		$methods[] = 'WC_Custom_QuickPay_Gateway';
-
+		$methods[] = 'WC_Gateway_Converge';
 		WC_QuickPay_Statekeeper::$gateways_added = true;
 
 		return apply_filters('woocommerce_quickpay_load_instances', $methods);
