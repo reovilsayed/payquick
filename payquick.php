@@ -12,17 +12,17 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define( 'WGC_DIR_PATH', plugin_dir_path( __FILE__ ) );
+define('WGC_DIR_PATH', plugin_dir_path(__FILE__));
 
 // WC active check
-require_once( WGC_DIR_PATH . 'includes/functions-wc-gateway-converge.php' );
-if ( ! wgc_is_woocommerce_active() ) {
+require_once(WGC_DIR_PATH . 'includes/functions-wc-gateway-converge.php');
+if (!wgc_is_woocommerce_active()) {
 	return;
 }
 
-define( 'WGC_VERSION', '1.16.0' );
-define( 'WGC_PAYMENT_NAME', "elavon-converge-gateway" );
-define( 'WGC_MAIN_FILE', __FILE__ );
+define('WGC_VERSION', '1.0.0');
+define('WGC_PAYMENT_NAME', "elavon-converge-gateway");
+define('WGC_MAIN_FILE', __FILE__);
 
 
 define('WCQP_VERSION', '1.0.1');
@@ -44,20 +44,21 @@ include_once 'includes/class-wc-gateway-converge-response-log-handler.php';
 
 
 
-add_action( 'woocommerce_before_template_part', 'wgc_before_template_part', 10, 3 );
-add_action( 'woocommerce_init', 'woocommerce_init', 10 );
+add_action('woocommerce_before_template_part', 'wgc_before_template_part', 10, 3);
+add_action('woocommerce_init', 'woocommerce_init', 10);
 
 
-function woocommerce_init(){
+function woocommerce_init()
+{
 
 	// Fix the issues related to WP Sessions that only works for logged in users
 	wgc_force_non_logged_user_wc_session();
 
-	if ( wgc_subscriptions_active() ) {
+	if (wgc_subscriptions_active()) {
 
 		add_filter('woocommerce_available_payment_gateways', 'wgc_conditional_payment_gateways');
 
-		if ( is_admin() ) {
+		if (is_admin()) {
 			include_once 'includes/validation/class-wc-subscription-validation-message.php';
 			include_once 'includes/validation/class-wc-plan-validator.php';
 			include_once 'includes/admin/meta-boxes/class-wc-meta-box-wgc-subscription-data.php';
@@ -77,8 +78,9 @@ function woocommerce_init(){
 }
 
 
-function wgc_before_template_part( $template_name, $template_path, $located ) {
-	if ( 'checkout/thankyou.php' == $template_name ) {
+function wgc_before_template_part($template_name, $template_path, $located)
+{
+	if ('checkout/thankyou.php' == $template_name) {
 		woocommerce_output_all_notices();
 	}
 }
@@ -87,12 +89,12 @@ function custom_quickpay_gateway_class()
 
 	// Set up localisation.
 	$text_domain = wgc_get_payment_name();
-	$locale      = is_admin() && function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
-	$locale      = apply_filters( 'plugin_locale', $locale, $text_domain );
+	$locale = is_admin() && function_exists('get_user_locale') ? get_user_locale() : get_locale();
+	$locale = apply_filters('plugin_locale', $locale, $text_domain);
 
-	unload_textdomain( $text_domain );
-	load_textdomain( $text_domain, WP_LANG_DIR . '/woocommerge-gateway-converge/woocommerce-gateway-converge-' . $locale . '.mo' );
-	load_plugin_textdomain( wgc_get_payment_name(), false, basename( WGC_DIR_PATH ) . '/i18n/languages' );
+	unload_textdomain($text_domain);
+	load_textdomain($text_domain, WP_LANG_DIR . '/woocommerge-gateway-converge/woocommerce-gateway-converge-' . $locale . '.mo');
+	load_plugin_textdomain(wgc_get_payment_name(), false, basename(WGC_DIR_PATH) . '/i18n/languages');
 
 	require_once 'includes/class-wc-gateway-converge.php';
 	require_once 'includes/class-wc-payment-token-gateway-converge-storedcard.php';
@@ -1409,7 +1411,7 @@ function handle_iziibuy_subscription_checkup()
 
 
 if (!wp_next_scheduled('custom_quickpay_gateway_iziibuy_schedule_task_hook')) {
-		wp_schedule_event(current_time('timestamp'), 'daily', 'custom_quickpay_gateway_iziibuy_schedule_task_hook');
+	wp_schedule_event(current_time('timestamp'), 'daily', 'custom_quickpay_gateway_iziibuy_schedule_task_hook');
 }
 
 // Hook your task to the scheduled event
