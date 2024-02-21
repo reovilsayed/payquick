@@ -76,7 +76,7 @@ class WC_QuickPay_Install {
 			}
 		}
 
-		self::update_db_version( WCQP_VERSION );
+		self::update_db_version( 1 );
 
 		self::stop_maintenance_mode();
 	}

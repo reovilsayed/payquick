@@ -28,7 +28,7 @@ if ( ! function_exists( 'wgc_is_woocommerce_active' ) ) {
  */
 if ( ! function_exists( 'wgc_get_payment_name' ) ) {
 	function wgc_get_payment_name() {
-		return WGC_PAYMENT_NAME;
+		return ELAVON_PAYMENT_NAME;
 	}
 }
 
@@ -1003,7 +1003,7 @@ function wgc_conditional_payment_gateways( $available_gateways ) {
 
 		foreach ( (array) $available_gateways as $key => $value ) {
 
-			if ( $key != WGC_PAYMENT_NAME ) {
+			if ( $key != ELAVON_PAYMENT_NAME ) {
 				unset( $available_gateways[ $key ] );
 			}
 		}

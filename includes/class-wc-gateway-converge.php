@@ -1098,7 +1098,7 @@ class WC_Gateway_Converge extends WC_Payment_Gateway_CC {
 	}
 
 	public function get_plugin_versions() {
-		return sprintf( __( 'Plugin version: %1$s', 'elavon-converge-gateway' ), WGC_VERSION ) . ' | ' . sprintf( __( 'API SDK version: %1$s', 'elavon-converge-gateway' ), Converge2::getSdkVersion() );
+		return sprintf( __( 'Plugin version: %1$s', 'elavon-converge-gateway' ), ELAVON_VERSION ) . ' | ' . sprintf( __( 'API SDK version: %1$s', 'elavon-converge-gateway' ), Converge2::getSdkVersion() );
 	}
 
 	public function change_subscription_payment_method( $subscription ) {
