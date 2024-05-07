@@ -1300,7 +1300,7 @@ if (!class_exists('Payquick_Plugin_Frontend')) {
 			}
 
 			//add_filter('woocommerce_cart_needs_payment', '__return_false');
-			add_action('woocommerce_thankyou', array($this, 'redirect_after_order_create_or_payment'));
+			// add_action('woocommerce_thankyou', array($this, 'redirect_after_order_create_or_payment'));
 			add_filter('theme_page_templates', array($this, 'quickpay_custom_template'));
 			add_filter('template_include', array($this, 'load_custom_template'));
 			add_filter('wp_enqueue_scripts', array($this, 'custom_payment_enqueue_styles'));
@@ -1335,6 +1335,13 @@ if (!class_exists('Payquick_Plugin_Frontend')) {
 			$redirect_url = ''; // Replace with the URL of the new page
 
 			if ($order) {
+				if (WC_QP()->s('direct_payment') == 'yes') {
+					
+				}else{
+					
+				}
+
+
 				if ($order->get_payment_method() == 'custom_quickpay_gateway') {
 					//wp_redirect($order->get_checkout_order_received_url());
 				} else {

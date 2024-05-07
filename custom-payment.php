@@ -59,7 +59,7 @@ $order = wc_get_order($order_id);
                         <input type="hidden" name="payment_method" value="quickpay">
                         <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
                         <button type="submit" name="complete-order" id="complete-order"
-                            class="btn btn-outline btn-block btn-lg">Proceed To Quickpay</button>
+                            class="btn btn-outline btn-block btn-lg">Proceed To Payment</button>
                     </form>
                 </div>
             </div>
