@@ -56,7 +56,7 @@ $redirect = get_post_meta($order_id, '_elavon_payment_link', true);
                 <div class="card-body">
                   
                         <a href="<?php echo $redirect;?>" id="complete-order"
-                            class="btn btn-outline  btn-lg" style="display:block">Proceed To Payment</a>
+                            class="btn btn-outline  btn-lg" style="display:block;text-align:center">Proceed To Payment</a>
                    
                 </div>
             </div>

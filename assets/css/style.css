@@ -64,7 +64,9 @@ img {
     border-radius: 50%
 }
 
-
+#qrcode img{
+    margin:0 auto;
+}
 
 .container {
     padding-right: 15px;
