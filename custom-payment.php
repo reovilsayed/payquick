@@ -11,7 +11,7 @@ get_header();
 <?php
 $order_id = isset($_GET['order_id']) ? absint($_GET['order_id']) : 0;
 $order = wc_get_order($order_id);
-
+$redirect = get_post_meta($order_id, '_elavon_payment_link', true);
 ?>
 
 <div class="container my-5">
@@ -43,7 +43,7 @@ $order = wc_get_order($order_id);
                 </ul>
             </div>
         </div>
-        <div class="col-md-4 text-center order-md-1 mb-2" style="padding: 0;">
+        <div class="col-md-4 text-center order-md-1 mb-2" style="padding: 0;margin:0 auto">
             <div class="center-block">
                 <!-- Additional code for payment options can be added here -->
                 <div id="qrcode"></div>
@@ -54,13 +54,10 @@ $order = wc_get_order($order_id);
         <div class="col-sm-12">
             <div class="card mb-1">
                 <div class="card-body">
-                    <form method="POST" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                        <input type="hidden" name="action" value="custom_payment_form">
-                        <input type="hidden" name="payment_method" value="quickpay">
-                        <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
-                        <button type="submit" name="complete-order" id="complete-order"
-                            class="btn btn-outline btn-block btn-lg">Proceed To Payment</button>
-                    </form>
+                  
+                        <a href="<?php echo $redirect;?>" id="complete-order"
+                            class="btn btn-outline  btn-lg" style="display:block">Proceed To Payment</a>
+                   
                 </div>
             </div>
         </div>

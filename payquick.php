@@ -1335,26 +1335,23 @@ if (!class_exists('Payquick_Plugin_Frontend')) {
 			$redirect_url = ''; // Replace with the URL of the new page
 
 			if ($order) {
-				if (WC_QP()->s('direct_payment') == 'yes') {
-					
-				}else{
-					
-				}
+				$redirect_url = add_query_arg('order_id', $order->get_id(), get_permalink(get_page_by_path('custom-payment')));
+				wp_redirect($redirect_url);
 
 
-				if ($order->get_payment_method() == 'custom_quickpay_gateway') {
-					//wp_redirect($order->get_checkout_order_received_url());
-				} else {
-					// $order->update_status('wc-pending');
-					if (WC_QP()->s('direct_payment') == 'yes') {
-						$redirect_to = woocommerce_quickpay_create_payment_link($order);
-						wp_redirect($redirect_to);
-					} else {
-						$redirect_url = add_query_arg('order_id', $order->get_id(), get_permalink(get_page_by_path('custom-payment')));
-						wp_redirect($redirect_url);
-					}
-					exit;
-				}
+				// if ($order->get_payment_method() == 'custom_quickpay_gateway') {
+				// 	//wp_redirect($order->get_checkout_order_received_url());
+				// } else {
+				// 	// $order->update_status('wc-pending');
+				// 	if (WC_QP()->s('direct_payment') == 'yes') {
+				// 		$redirect_to = woocommerce_quickpay_create_payment_link($order);
+				// 		wp_redirect($redirect_to);
+				// 	} else {
+				// 		$redirect_url = add_query_arg('order_id', $order->get_id(), get_permalink(get_page_by_path('custom-payment')));
+				// 		wp_redirect($redirect_url);
+				// 	}
+				// 	exit;
+				// }
 			}
 		}
 
@@ -1425,14 +1422,18 @@ add_action('admin_post_nopriv_custom_payment_form', 'handle_custom_payment_form'
 
 function handle_custom_payment_form()
 {
-	if ($_POST['payment_method'] == 'quickpay') {
-		$order = wc_get_order($_POST['order_id']);
-		add_post_meta($_POST['order_id'], '_payment_method', 'custom_quickpay_gateway', true);
-		add_post_meta($_POST['order_id'], '_payment_method_title', 'Standard Payment', true);
+	$order = wc_get_order($_POST['order_id']);
+	$redirect_to = $order->get_checkout_payment_url( true );
+	wp_redirect($redirect_to);
 
-		$redirect_to = woocommerce_quickpay_create_payment_link($order);
-		wp_redirect($redirect_to);
-	}
+	// if ($_POST['payment_method'] == 'quickpay') {
+	// 	$order = wc_get_order($_POST['order_id']);
+	// 	add_post_meta($_POST['order_id'], '_payment_method', 'custom_quickpay_gateway', true);
+	// 	add_post_meta($_POST['order_id'], '_payment_method_title', 'Standard Payment', true);
+
+	// 	$redirect_to = woocommerce_quickpay_create_payment_link($order);
+	// 	wp_redirect($redirect_to);
+	// }
 
 	// wp_redirect( home_url('/thank-you') );
 	exit;

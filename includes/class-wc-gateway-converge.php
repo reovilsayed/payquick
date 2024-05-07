@@ -620,7 +620,8 @@ class WC_Gateway_Converge extends WC_Payment_Gateway_CC {
 			$hpp_url = WGC_HPP_URL_MAP[$this->get_option( WGC_KEY_ENVIRONMENT )];
 			$redirect = $this->getConvergeOrderWrapper()->get_request_url( $payment_session_id, $hpp_url );
 		}
-
+		add_post_meta($order_id, '_elavon_payment_link', $redirect, true);
+		$redirect = add_query_arg('order_id', $order->get_id(), get_permalink(get_page_by_path('custom-payment')));
 		return array(
 			'result'   => 'success',
 			'redirect' => $redirect,
