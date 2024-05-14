@@ -333,7 +333,7 @@ class WC_Gateway_Converge_Api {
 
 		if(	$this->gateway->get_option(WGC_KEY_INTEGRATION_OPTION) == WGC_SETTING_INTEGRATION_HPP_REDIRECT)
 		{
-			$return_url = WC()->api_request_url( 'wc_payment_gateways' );
+			$return_url =add_query_arg('order_id', $order->get_id(),  WC()->api_request_url( 'wc_payment_gateways' ));
 			$cancel_url = $order->get_cancel_order_url_raw();
 			$hppType = "fullPageRedirect";
 		}

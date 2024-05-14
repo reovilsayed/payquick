@@ -1645,3 +1645,4 @@ function custom_woocommerce_checkout_fields($fields) {
 
     return $fields;
 }
+

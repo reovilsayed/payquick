@@ -339,39 +339,19 @@ class WC_Gateway_Converge extends WC_Payment_Gateway_CC {
 	 * Return handler for Hosted Payments.
 	 */
 	public function return_handler() {
-		$payment_session_id = $this->get_payment_session_id();
-		$payment_session = $this->converge_api->get_payment_session( $payment_session_id );
-
-		@ob_clean();
-		header( 'HTTP/1.1 200 OK' );
-		$hosted_card_key = 'hostedCard';
-		if ( $this->isHppPopup() && $payment_session->getBlik() == null) {
-			$hosted_card_key = 'convergePaymentToken';
-		}
-
-		if ( isset( $_REQUEST[ $hosted_card_key ] ) && $payment_session->getBlik() == null ) {
-			$hosted_card = $_REQUEST[ $hosted_card_key ];
+		$order_id = isset($_GET['order_id']) ? absint($_GET['order_id']) : 0;
+			$hosted_card = $_REQUEST['hostedCard' ];
 			$this->set_hosted_card_session( $hosted_card );
 
-			$this->handle_return_from_hpp( $hosted_card );
+			$this->handle_return_from_hpp( $hosted_card,$order_id );
 
-		} else if ( isset( $_REQUEST['PaRes'] ) ) {
-			$this->handle_return_from_three_d_secure( $_REQUEST ); ##Test with ThreeDSecure
-
-		} else if ( $payment_session->getBlik() != null ) {
-			$this->handle_return_from_blik($payment_session);
-		} else {
-			wp_redirect( wc_get_page_permalink( 'cart' ) );
-		}
-
-		exit;
+	
 	}
 
 	/**
 	 * @param $params
 	 */
-	protected function handle_return_from_hpp( $hosted_card ) {
-		$order_id = $this->get_sale_session_order_id();
+	protected function handle_return_from_hpp( $hosted_card,$order_id ) {
 		if ( $order_id ) {
 			$order = wc_get_order( $order_id );
 			// HPP takes care of 3DS
@@ -483,31 +463,15 @@ class WC_Gateway_Converge extends WC_Payment_Gateway_CC {
 	}
 
 	protected function do_sale( WC_Order $order, $hosted_card ) {
-		$converge_order_id = $this->get_sale_session_converge_order_id();
-		$shopper           = wgc_get_c2_shopper_id();
-		if (
-			$this->isSavePaymentMethodsEnabled()
-			&& $this->get_save_for_later_use_session()
-			&& $this->can_store_one_more_card()
-		) {
-			$stored_card = $this->converge_api->create_stored_card( $order, $shopper, $hosted_card );
-			if ( $stored_card ) {
-				$this->save_stored_card( $order, $stored_card );
-
-				$this->converge_api->create_sale_transaction_with_stored_card(
-					$order,
-					$converge_order_id,
-					$stored_card->getId()
-				);
-			}
-		} else {
+		$payment_session_id = get_post_meta($order->get_id(), '_payment_session_id', true);
+		$converge_order_id = get_post_meta($order->get_id(), '_converge_order_id', true);
 			$this->converge_api->create_sale_transaction_with_hosted_card(
 				$order,
 				$converge_order_id,
 				$hosted_card,
-				$this->get_payment_session_id()
+				$payment_session_id
 			);
-		}
+
 	}
 
 	protected function do_blik_sale( WC_Order $order, $payment_session ) {
@@ -621,6 +585,8 @@ class WC_Gateway_Converge extends WC_Payment_Gateway_CC {
 			$redirect = $this->getConvergeOrderWrapper()->get_request_url( $payment_session_id, $hpp_url );
 		}
 		add_post_meta($order_id, '_elavon_payment_link', $redirect, true);
+		add_post_meta($order_id, '_payment_session_id', $payment_session_id, true);
+		add_post_meta($order_id, '_converge_order_id', $converge_order_id, true);
 		$redirect = add_query_arg('order_id', $order->get_id(), get_permalink(get_page_by_path('custom-payment')));
 		return array(
 			'result'   => 'success',
