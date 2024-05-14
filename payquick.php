@@ -1627,3 +1627,21 @@ function get_plugin_version()
     $plugin_data = get_plugin_data(__FILE__);
     return $plugin_data['Version'];
 }
+
+add_filter('woocommerce_checkout_fields', 'custom_woocommerce_checkout_fields');
+
+function custom_woocommerce_checkout_fields($fields) {
+    if (!is_user_logged_in()) {
+        // Keep only first name, last name, and email fields
+        $fields['billing'] = array(
+            'billing_first_name' => $fields['billing']['billing_first_name'],
+            'billing_last_name'  => $fields['billing']['billing_last_name'],
+            'billing_email'      => $fields['billing']['billing_email'],
+        );
+
+        // Optionally, if you want to remove the shipping fields completely for guests
+        unset($fields['shipping']);
+    }
+
+    return $fields;
+}
