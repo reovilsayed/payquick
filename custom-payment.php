@@ -11,7 +11,22 @@ get_header();
 <?php
 $order_id = isset($_GET['order_id']) ? absint($_GET['order_id']) : 0;
 $order = wc_get_order($order_id);
-$redirect = get_post_meta($order_id, '_elavon_payment_link', true);
+if ($order) {
+    $redirect = get_post_meta($order_id, '_elavon_payment_link', true);
+    $order_key = $order->get_order_key();
+    $thank_you_url = add_query_arg(
+        array(
+            'key' => $order_key
+        ),
+        wc_get_endpoint_url('order-received', $order_id, wc_get_checkout_url())
+    );
+    $status = $order->get_status();
+} else {
+    exit();
+}
+
+
+
 ?>
 
 <div class="container my-5">
@@ -54,10 +69,10 @@ $redirect = get_post_meta($order_id, '_elavon_payment_link', true);
         <div class="col-sm-12">
             <div class="card mb-1">
                 <div class="card-body">
-                  
-                        <a href="<?php echo $redirect;?>" id="complete-order"
-                            class="btn btn-outline  btn-lg" style="display:block;text-align:center">Proceed To Payment</a>
-                   
+
+                    <a href="<?php echo $redirect; ?>" id="complete-order" class="btn btn-outline  btn-lg"
+                        style="display:block;text-align:center">Proceed To Payment</a>
+
                 </div>
             </div>
         </div>
@@ -66,11 +81,24 @@ $redirect = get_post_meta($order_id, '_elavon_payment_link', true);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 
-  var dynamicURL = `<?php echo home_url($_SERVER['REQUEST_URI'])?>`;
-  var qrCode = new QRCode(document.getElementById("qrcode"), {
-    text: dynamicURL,
-  });
-  qrCode.makeCode(dynamicURL);
+
+
+    let orderStatus = "<?php echo esc_js($status); ?>";
+    let thankYouUrl = "<?php echo esc_url($thank_you_url); ?>";
+
+    if (orderStatus === 'processing') {
+        window.location.href = thankYouUrl;
+    } else {
+        window.setTimeout(function () {
+
+            location.reload();
+        }, 5000);
+    }
+    var dynamicURL = `<?php echo home_url($_SERVER['REQUEST_URI']) ?>`;
+    var qrCode = new QRCode(document.getElementById("qrcode"), {
+        text: dynamicURL,
+    });
+    qrCode.makeCode(dynamicURL);
 
 </script>
 
