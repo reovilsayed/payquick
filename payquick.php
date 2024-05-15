@@ -1636,7 +1636,6 @@ function custom_woocommerce_checkout_fields($fields) {
         $fields['billing'] = array(
             'billing_first_name' => $fields['billing']['billing_first_name'],
             'billing_last_name'  => $fields['billing']['billing_last_name'],
-            'billing_email'      => $fields['billing']['billing_email'],
         );
 
         // Optionally, if you want to remove the shipping fields completely for guests

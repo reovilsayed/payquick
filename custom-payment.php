@@ -92,7 +92,7 @@ if ($order) {
         window.setTimeout(function () {
 
             location.reload();
-        }, 5000);
+        }, 10000);
     }
     var dynamicURL = `<?php echo home_url($_SERVER['REQUEST_URI']) ?>`;
     var qrCode = new QRCode(document.getElementById("qrcode"), {
