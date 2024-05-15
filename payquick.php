@@ -1644,4 +1644,43 @@ function custom_woocommerce_checkout_fields($fields) {
 
     return $fields;
 }
+add_action('woocommerce_thankyou', 'add_email_field_to_thank_you_page', 20);
 
+function add_email_field_to_thank_you_page($order_id) {
+    ?>
+ <form id="email_form" method="post" class="mt-4">
+        <div class="form-group">
+            <label for="email_input">Enter your email to receive order details:</label>
+            <input type="email" id="email_input" name="email_input_for_invoice" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
+    </form>
+    <?php
+}
+
+add_action('init', 'handle_email_form_submission');
+
+function handle_email_form_submission() {
+    if (isset($_POST['email_input_for_invoice']) && isset($_POST['order_id'])) {
+        $email = sanitize_email($_POST['email_input_for_invoice']);
+        $order_id = intval($_POST['order_id']);
+        $order = wc_get_order($order_id);
+
+        if ($order && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Send email with order details
+            $mailer = WC()->mailer();
+            $email_class = $mailer->emails['WC_Email_Customer_Invoice'];
+
+            // Trigger the email sending
+            $email_class->trigger($order_id, $order);
+
+            // Optionally, you can also set the recipient manually
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+            wp_mail($email, 'Your Order Details', $email_class->style_inline($email_class->get_content()), $headers);
+
+            // Add a message to indicate that the email was sent successfully
+            wc_add_notice(__('Order details sent to your email address.'), 'success');
+        }
+    }
+}
